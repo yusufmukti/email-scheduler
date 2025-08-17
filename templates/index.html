@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include '_favicon.html' %}
+    <style>
+    /* Modern harmonious dark mode */
+    body.bg-dark {
+    background-color: #23272f !important;
+    color: #f3f4f6 !important;
+    }
+    body.bg-dark .card,
+    body.bg-dark .table,
+    body.bg-dark .dropdown-menu {
+    background-color: #181a1b !important;
+    color: #f3f4f6 !important;
+    }
+    body.bg-dark .navbar,
+    body.bg-dark .navbar-dark {
+        background-color: #1A1D21 !important;
+        color: #fff !important;
+    }
+    body.bg-dark .table-striped > tbody > tr:nth-of-type(odd) {
+        background-color: #20232A !important;
+    }
+    body.bg-dark .form-control,
+    body.bg-dark .form-select {
+        background-color: #23272E !important;
+        color: #E3E6EB !important;
+        border-color: #3A3F44 !important;
+    }
+    body.bg-dark .form-control:focus,
+    body.bg-dark .form-select:focus {
+        background-color: #23272E !important;
+        color: #7FDBFF !important;
+        border-color: #7FDBFF !important;
+        box-shadow: 0 0 0 0.2rem rgba(127,219,255,.25) !important;
+    }
+    body.bg-dark .btn-primary {
+        background-color: #2563eb !important;
+        border-color: #2563eb !important;
+        color: #f3f4f6 !important;
+    }
+    body.bg-dark .btn-primary:hover {
+        background-color: #1d4ed8 !important;
+        border-color: #1d4ed8 !important;
+    }
+    body.bg-dark .btn-success {
+        background-color: #22c55e !important;
+        border-color: #22c55e !important;
+        color: #f3f4f6 !important;
+    }
+    body.bg-dark .btn-danger {
+        background-color: #ef4444 !important;
+        border-color: #ef4444 !important;
+        color: #f3f4f6 !important;
+    }
+    body.bg-dark .btn-warning {
+        background-color: #f59e42 !important;
+        border-color: #f59e42 !important;
+        color: #23272f !important;
+    }
+    body.bg-dark .btn-outline-light {
+        color: #FFDC00 !important;
+        border-color: #FFDC00 !important;
+    }
+    body.bg-dark .btn-outline-light:hover {
+        background-color: #FFDC00 !important;
+        color: #23272E !important;
+    }
+    body.bg-dark .alert-info {
+        background-color: #2563eb !important;
+        color: #f3f4f6 !important;
+        border-color: #2563eb !important;
+    }
+    body.bg-dark .alert-success {
+        background-color: #22c55e !important;
+        color: #f3f4f6 !important;
+        border-color: #22c55e !important;
+    }
+    body.bg-dark .alert-danger {
+        background-color: #ef4444 !important;
+        color: #f3f4f6 !important;
+        border-color: #ef4444 !important;
+    }
+    body.bg-dark .alert-warning {
+        background-color: #f59e42 !important;
+        color: #23272f !important;
+        border-color: #f59e42 !important;
+    }
+    body.bg-dark .table-dark {
+        background-color: #23272E !important;
+        color: #E3E6EB !important;
+    }
+    body.bg-dark .table-light {
+        background-color: #23272E !important;
+        color: #FFDC00 !important;
+    }
+    body.bg-dark .dropdown-item {
+        color: #E3E6EB !important;
+    }
+    body.bg-dark .dropdown-item.active, body.bg-dark .dropdown-item:active {
+        background-color: #7FDBFF !important;
+        color: #181C1F !important;
+    }
+    /* Always white for brand */
+    .navbar .navbar-brand { color: #fff !important; }
+
+    /* Skip link */
+    .skip-link {
+      position: absolute;
+      top: -40px;
+      left: 0;
+      width: 100%;
+      padding: 8px 16px;
+      background: #007bff;
+      color: white;
+      text-align: center;
+      transition: top 0.2s;
+      z-index: 1000;
+    }
+    .skip-link:focus {
+      top: 0;
+    }
+    </style>
+        <meta charset="UTF-8">
+        <title>Email Scheduler</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@yaireo/tagify@4.17.9/dist/tagify.css">
+    <link href="{{ url_for('static', filename='css/brand.css') }}" rel="stylesheet">
+</head>
+<body class="bg-light">
+  <a href="#mainContent" class="skip-link">Skip to main content</a>
+            <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4" aria-label="Main Navigation">
+                <div class="container-fluid">
+                    <a class="navbar-brand d-flex align-items-center gap-2 lang-en" href="/" aria-label="Homepage">
+                        <img src="{{ url_for('static', filename='logo.svg') }}" alt="Logo" width="32" height="32" style="vertical-align:middle;">
+                        <span>Email Scheduler</span>
+                    </a>
+                    <a class="navbar-brand d-flex align-items-center gap-2 lang-id d-none" href="/" aria-label="Beranda">
+                        <img src="{{ url_for('static', filename='logo.svg') }}" alt="Logo" width="32" height="32" style="vertical-align:middle;">
+                        <span>Penjadwal Email</span>
+                    </a>
+                    <div class="d-flex ms-auto align-items-center gap-2">
+                        <div id="darkModeToggle" class="toggle-switch" role="button" tabindex="0" aria-pressed="false" title="Toggle dark mode" style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                            <span id="sunIcon" class="bi bi-sun" style="font-size: 1.3rem;"></span>
+                            <div style="position: relative; width: 44px; height: 24px; background: #ccc; border-radius: 12px; transition: background 0.2s;">
+                                <div id="toggleKnob" style="position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background: #fff; border-radius: 50%; box-shadow: 0 1px 4px rgba(0,0,0,0.2); transition: left 0.2s, background 0.2s;"></div>
+                            </div>
+                            <span id="moonIcon" class="bi bi-moon" style="font-size: 1.3rem;"></span>
+                        </div>
+    <style>
+    /* Toggle switch for dark mode */
+    .toggle-switch { user-select: none; }
+    .toggle-switch[aria-pressed="true"] #toggleKnob { left: 22px !important; background: #7FDBFF !important; }
+    .toggle-switch[aria-pressed="false"] #toggleKnob { left: 2px !important; background: #fff !important; }
+    .toggle-switch #sunIcon { color: #FFDC00; opacity: 1; transition: opacity 0.2s; }
+    .toggle-switch #moonIcon { color: #7FDBFF; opacity: 0.7; transition: opacity 0.2s; }
+    .toggle-switch[aria-pressed="true"] #sunIcon { opacity: 0.5; }
+    .toggle-switch[aria-pressed="true"] #moonIcon { opacity: 1; }
+    </style>
+                        <select id="langSwitcher" class="form-select form-select-sm w-auto">
+                            <option value="en">EN</option>
+                            <option value="id">ID</option>
+                        </select>
+                        <form method="post" action="/logout" class="mb-0">
+                            <button type="submit" class="btn btn-outline-light lang-en">Log Out</button>
+                            <button type="submit" class="btn btn-outline-light lang-id d-none">Keluar</button>
+                        </form>
+                    </div>
+                </div>
+            </nav>
+                <div class="container" id="mainContent">
+                        <!-- Toast container for feedback -->
+                        <div aria-live="polite" aria-atomic="true" class="position-fixed top-0 end-0 p-3" style="z-index: 1080;">
+                            <div id="toastContainer"></div>
+                        </div>
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <script>
+            document.addEventListener('DOMContentLoaded', function() {
+              var toastContainer = document.getElementById('toastContainer');
+              {% for message in messages %}
+              var toast = document.createElement('div');
+              toast.className = 'toast align-items-center text-bg-info border-0 show';
+              toast.setAttribute('role', 'alert');
+              toast.setAttribute('aria-live', 'assertive');
+              toast.setAttribute('aria-atomic', 'true');
+              toast.innerHTML = `
+                <div class="d-flex">
+                  <div class="toast-body">{{ message|e }}</div>
+                  <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+              `;
+              toastContainer.appendChild(toast);
+              var bsToast = new bootstrap.Toast(toast, { delay: 5000 });
+              bsToast.show();
+              setTimeout(function() { toast.remove(); }, 5200);
+              {% endfor %}
+            });
+          </script>
+        {% endif %}
+      {% endwith %}
+                    <div class="row justify-content-center">
+                        <div class="col-lg-7 col-md-10">
+                            <div class="card shadow mb-4">
+                                <div class="card-header bg-primary text-white lang-en section-title">Schedule a New Email</div>
+                                <div class="card-header bg-primary text-white lang-id d-none section-title">Jadwalkan Email Baru</div>
+                                <div class="card-body">
+                                    <form method="post" action="/send" enctype="multipart/form-data" aria-label="Schedule Email Form">
+                                      <div class="accordion mb-3" id="scheduleAccordion">
+                                        <div class="accordion-item">
+                                          <h2 class="accordion-header" id="headingTo">
+                                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTo" aria-expanded="true" aria-controls="collapseTo">
+                                              <span class="lang-en">Recipients</span><span class="lang-id d-none">Penerima</span>
+                                            </button>
+                                          </h2>
+                                          <div id="collapseTo" class="accordion-collapse collapse show" aria-labelledby="headingTo" data-bs-parent="#scheduleAccordion">
+                                            <div class="accordion-body">
+                                              <div class="mb-3">
+                                                <label class="form-label lang-en" for="to_address">Email Address(es)</label>
+                                                <label class="form-label lang-id d-none" for="to_address">Alamat Email</label>
+                                                <input id="to_address" name="to_address" class="form-control" required placeholder="Type and press enter" data-en="Type and press enter" data-id="Ketik lalu tekan enter" autofocus aria-label="Recipient Email Addresses">
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div class="accordion-item">
+                                          <h2 class="accordion-header" id="headingContent">
+                                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseContent" aria-expanded="true" aria-controls="collapseContent">
+                                              <span class="lang-en">Content</span><span class="lang-id d-none">Isi Email</span>
+                                            </button>
+                                          </h2>
+                                          <div id="collapseContent" class="accordion-collapse collapse show" aria-labelledby="headingContent" data-bs-parent="#scheduleAccordion">
+                                            <div class="accordion-body">
+                                              <div class="mb-3">
+                                                <label class="form-label lang-en" for="subject">Subject</label>
+                                                <label class="form-label lang-id d-none" for="subject">Subjek</label>
+                                                <input id="subject" type="text" name="subject" class="form-control" required aria-label="Email Subject">
+                                              </div>
+                                              <div class="mb-3">
+                                                <label class="form-label lang-en" for="message">Message</label>
+                                                <label class="form-label lang-id d-none" for="message">Pesan</label>
+                                                <textarea id="message" name="message" class="form-control" rows="3" required aria-label="Email Message"></textarea>
+                                              </div>
+                                              {% raw %}
+                                              <!-- Time Variable Legend Toggle: How to use {{...}} in subject/body (plain, easy-to-read style) -->
+                                              <div class="mb-3" style="margin-top:-1rem;">
+                                                <button class="btn btn-link d-flex align-items-center gap-1" type="button" data-bs-toggle="collapse" data-bs-target="#timeFormatLegend" aria-expanded="false" aria-controls="timeFormatLegend" style="padding-left:0;">
+                                                  <span class="bi bi-info-circle text-info" style="font-size:1.2rem;"></span>
+                                                  <span class="lang-en">Need help with time variables?</span>
+                                                  <span class="lang-id d-none">Butuh bantuan variabel waktu?</span>
+                                                </button>
+                                                <div class="collapse" id="timeFormatLegend">
+                                                  <div class="card card-body bg-light border-info mt-2">
+                                                    <span class="lang-en">
+                                                      <strong>What is a time variable?</strong><br>
+                                                      Time variables are special codes you can put in your subject or message. When your email is sent, these codes will be replaced with the actual date or time (for example, <code>{{YYYY}}</code> becomes <code>2025</code>). The value is filled dynamically based on the time the email is sent.<br><br>
+                                                      <strong>How to use <code>{{...}}</code> variables in your subject or message:</strong><br>
+                                                      Write <code>{{YYYY}}</code> for year (e.g. 2025)<br>
+                                                      <code>{{YY}}</code> for 2-digit year (e.g. 25)<br>
+                                                      <code>{{MMMM}}</code> for full month name (e.g. August)<br>
+                                                      <code>{{MMM}}</code> for short month name (e.g. Aug)<br>
+                                                      <code>{{MM}}</code> for 2-digit month (e.g. 08)<br>
+                                                      <code>{{M}}</code> for month number (e.g. 8)<br>
+                                                      <code>{{DD}}</code> for 2-digit day (e.g. 05)<br>
+                                                      <code>{{D}}</code> for day (e.g. 5)<br>
+                                                      <code>{{HH}}</code> for 2-digit hour (24h, e.g. 09, 17)<br>
+                                                      <code>{{H}}</code> for hour (e.g. 9, 17)<br>
+                                                      <code>{{mm}}</code> for 2-digit minute (e.g. 07, 45)<br>
+                                                      <code>{{m}}</code> for minute (e.g. 7, 45)<br>
+                                                      <code>{{dddd}}</code> for full weekday (e.g. Sunday)<br>
+                                                      <code>{{ddd}}</code> for short weekday (e.g. Sun)<br>
+                                                      <code>{{time}}</code> for full date and time (e.g. 2025-08-17 14:30)<br>
+                                                      <code>{{DATETIME}}</code> for day name, date, and time (e.g. Monday 2025-08-18 14:30)<br>
+                                                      <br><b>Examples:</b><br>
+                                                      Subject: Report for <code>{{YYYY MMMM}}</code> → Report for 2025 August<br>
+                                                      Body: Meeting at <code>{{HH:mm}}</code> → Meeting at 14:30<br>
+                                                      Subject: Today is <code>{{dddd}}</code> → Today is Sunday<br>
+                                                      Subject: Sent at <code>{{time}}</code> → Sent at 2025-08-18 14:30<br>
+                                                      Subject: Sent at <code>{{DATETIME}}</code> → Sent at Monday 2025-08-18 14:30<br>
+                                                      <br><b>Tip:</b> You can combine any formats, and use them multiple times.
+                                                    </span>
+                                                    <span class="lang-id d-none">
+                                                      <strong>Apa itu variabel waktu?</strong><br>
+                                                      Variabel waktu adalah kode khusus yang bisa Anda tulis di subjek atau isi email. Saat email dikirim, kode ini akan diganti dengan tanggal atau waktu sebenarnya (misal, <code>{{YYYY}}</code> menjadi <code>2025</code>). Nilai variabel ini diisi secara dinamis sesuai waktu pengiriman email.<br><br>
+                                                      <strong>Cara pakai variabel <code>{{...}}</code> di subjek atau isi email:</strong><br>
+                                                      Tulis <code>{{YYYY}}</code> untuk tahun (misal 2025)<br>
+                                                      <code>{{YY}}</code> untuk 2 digit tahun (misal 25)<br>
+                                                      <code>{{MMMM}}</code> untuk nama bulan lengkap (misal Agustus)<br>
+                                                      <code>{{MMM}}</code> untuk singkatan bulan (misal Agu)<br>
+                                                      <code>{{MM}}</code> untuk bulan 2 digit (misal 08)<br>
+                                                      <code>{{M}}</code> untuk nomor bulan (misal 8)<br>
+                                                      <code>{{DD}}</code> untuk tanggal 2 digit (misal 05)<br>
+                                                      <code>{{D}}</code> untuk tanggal (misal 5)<br>
+                                                      <code>{{HH}}</code> untuk jam 2 digit (24 jam, misal 09, 17)<br>
+                                                      <code>{{H}}</code> untuk jam (misal 9, 17)<br>
+                                                      <code>{{mm}}</code> untuk menit 2 digit (misal 07, 45)<br>
+                                                      <code>{{m}}</code> untuk menit (misal 7, 45)<br>
+                                                      <code>{{dddd}}</code> untuk nama hari lengkap (misal Minggu)<br>
+                                                      <code>{{ddd}}</code> untuk singkatan hari (misal Min)<br>
+                                                      <code>{{time}}</code> untuk tanggal dan jam lengkap (misal 2025-08-17 14:30)<br>
+                                                      <code>{{DATETIME}}</code> untuk nama hari, tanggal, dan jam lengkap (misal Senin 2025-08-18 14:30)<br>
+                                                      <br><b>Contoh:</b><br>
+                                                      Subjek: Laporan <code>{{YYYY MMMM}}</code> → Laporan 2025 Agustus<br>
+                                                      Isi: Meeting jam <code>{{HH:mm}}</code> → Meeting jam 14:30<br>
+                                                      Subjek: Hari ini <code>{{dddd}}</code> → Hari ini Minggu<br>
+                                                      Subjek: Dikirim pada <code>{{time}}</code> → Dikirim pada 2025-08-18 14:30<br>
+                                                      Subjek: Dikirim pada <code>{{DATETIME}}</code> → Dikirim pada Senin 2025-08-18 14:30<br>
+                                                      <br><b>Tips:</b> Bisa digabung dan dipakai berkali-kali.
+                                                    </span>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                              {% endraw %}
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div class="accordion-item">
+                                          <h2 class="accordion-header" id="headingSchedule">
+                                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSchedule" aria-expanded="true" aria-controls="collapseSchedule">
+                                              <span class="lang-en">Schedule</span><span class="lang-id d-none">Jadwal</span>
+                                            </button>
+                                          </h2>
+                                          <div id="collapseSchedule" class="accordion-collapse collapse show" aria-labelledby="headingSchedule" data-bs-parent="#scheduleAccordion">
+                                            <div class="accordion-body">
+                                              <div class="row mb-3">
+                                                <div class="col-md-6">
+                                                  <label class="form-label lang-en" for="schedule_option">Schedule</label>
+                                                  <label class="form-label lang-id d-none" for="schedule_option">Jadwal</label>
+                                                  <select id="schedule_option" name="schedule_option" class="form-select" required aria-label="Schedule Option">
+                                                    <option value="one_time" data-en="One-Time Only" data-id="Sekali Saja">One-Time Only</option>
+                                                    <option value="hourly" data-en="Every Hour" data-id="Setiap Jam">Every Hour</option>
+                                                    <option value="daily" data-en="Daily" data-id="Harian">Daily</option>
+                                                    <option value="weekly" data-en="Weekly" data-id="Mingguan">Weekly</option>
+                                                    <option value="monthly" data-en="Monthly" data-id="Bulanan">Monthly</option>
+                                                    <option value="three_monthly" data-en="Every 3 Months" data-id="Setiap 3 Bulan">Every 3 Months</option>
+                                                    <option value="yearly" data-en="Yearly" data-id="Tahunan">Yearly</option>
+                                                  </select>
+                                                </div>
+                                                <div class="col-md-3">
+                                                  <label class="form-label lang-en" for="start_date">Start Date</label>
+                                                  <label class="form-label lang-id d-none" for="start_date">Tanggal Mulai</label>
+                                                  <input id="start_date" type="date" name="start_date" class="form-control" required aria-label="Start Date">
+                                                </div>
+                                                <div class="col-md-3">
+                                                  <label class="form-label lang-en" for="start_time">Start Time</label>
+                                                  <label class="form-label lang-id d-none" for="start_time">Waktu Mulai</label>
+                                                  <input id="start_time" type="time" name="start_time" class="form-control" required aria-label="Start Time">
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div class="accordion-item">
+                                          <h2 class="accordion-header" id="headingAttachments">
+                                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAttachments" aria-expanded="true" aria-controls="collapseAttachments">
+                                              <span class="lang-en">Attachments</span><span class="lang-id d-none">Lampiran</span>
+                                            </button>
+                                          </h2>
+                                          <div id="collapseAttachments" class="accordion-collapse collapse show" aria-labelledby="headingAttachments" data-bs-parent="#scheduleAccordion">
+                                            <div class="accordion-body">
+                                              <div class="mb-3">
+                                                <label class="form-label lang-en" for="attachments">Attachments</label>
+                                                <label class="form-label lang-id d-none" for="attachments">Lampiran</label>
+                                                <div class="custom-file-input-wrapper">
+                                                  <input type="file" id="attachments" name="attachments" class="form-control d-none" multiple aria-label="Attachments">
+                                                  <button type="button" id="customFileBtn" class="btn btn-outline-secondary">
+                                                    <span class="lang-en">Choose Files</span>
+                                                    <span class="lang-id d-none">Pilih File</span>
+                                                  </button>
+                                                  <span id="fileInputLabel" class="form-label mt-1 ms-2 align-middle">
+                                                    <span class="lang-en">No files chosen</span>
+                                                    <span class="lang-id d-none">Belum ada file dipilih</span>
+                                                  </span>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <button type="submit" class="btn btn-primary w-100 lang-en">Schedule Email</button>
+                                      <button type="submit" class="btn btn-primary w-100 lang-id d-none">Jadwalkan Email</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            {% if jobs and jobs|length > 0 %}
+                    <div class="row justify-content-center">
+                        <div class="col-lg-10">
+                            <div class="card shadow mb-4">
+                                <div class="card-header bg-secondary text-white lang-en section-title">Your Scheduled Emails</div>
+                                <div class="card-header bg-secondary text-white lang-id d-none section-title">Email Terjadwal Anda</div>
+                                <div class="card-body p-0">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped align-middle mb-0" aria-label="Scheduled Emails Table">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th class="lang-en">Subject</th>
+                                                    <th class="lang-id d-none">Subjek</th>
+                                                    <th class="lang-en">To</th>
+                                                    <th class="lang-id d-none">Kepada</th>
+                                                    <th class="lang-en">Schedule</th>
+                                                    <th class="lang-id d-none">Jadwal</th>
+                                                    <th class="lang-en">Start Date</th>
+                                                    <th class="lang-id d-none">Tanggal Mulai</th>
+                                                    <th class="lang-en">Next Schedule</th>
+                                                    <th class="lang-id d-none">Jadwal Berikutnya</th>
+                                                    <th class="lang-en">Action</th>
+                                                    <th class="lang-id d-none">Aksi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for item in jobs %}
+                                                <tr>
+                                                    <td>{{ item.job.subject }}</td>
+                                                    <td style="white-space: pre-line;">{{ item.job.to_address.replace(',', '\n') }}</td>
+                                                    <td>{{ item.job.schedule_option.replace('_', ' ').title() }}</td>
+                                                    <td>{{ item.job.start_date }}</td>
+                                                    <td>{{ item.next_run.strftime('%Y-%m-%d %H:%M') if item.next_run else 'N/A' }}</td>
+                                                    <td>
+                                                        <div class="d-flex flex-wrap gap-2" role="group" aria-label="Actions for this scheduled email">
+                                                            <form method="post" action="/send_now/{{ item.job.id }}">
+                                                                <button type="submit" class="btn btn-sm btn-primary lang-en">Send Now</button>
+                                                                <button type="submit" class="btn btn-sm btn-primary lang-id d-none">Kirim Sekarang</button>
+                                                            </form>
+                                                            <form method="get" action="/edit/{{ item.job.id }}">
+                                                                <button type="submit" class="btn btn-sm btn-success lang-en ms-2">Edit</button>
+                                                                <button type="submit" class="btn btn-sm btn-success lang-id d-none ms-2">Ubah</button>
+                                                            </form>
+                                                            <form method="post" action="/cancel/{{ item.job.id }}">
+                                                                <button type="submit" class="btn btn-sm btn-outline-danger lang-en ms-2" onclick="return confirm('Cancel this scheduled email?');">Cancel</button>
+                                                                <button type="submit" class="btn btn-sm btn-outline-danger lang-id d-none ms-2" onclick="return confirm('Batalkan email terjadwal ini?');">Batalkan</button>
+                                                            </form>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            {% endif %}
+        </div>
+    </script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify@4.17.9/dist/tagify.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.js"></script>
+            <script>
+            // Tagify with dynamic placeholder
+            var input = document.querySelector('input[name=to_address]');
+            var tagifyInstance = null;
+            function initTagify(placeholder) {
+                if (tagifyInstance) tagifyInstance.destroy();
+                input.placeholder = placeholder;
+                tagifyInstance = new Tagify(input, {
+                    delimiters: ",;\n",
+                    pattern: /^[^@\s]+@[^@\s]+\.[^@\s]+$/,
+                    whitelist: [],
+                    dropdown: { enabled: 0 }
+                });
+            }
+            // Custom file input button logic (robust for accordion/section changes)
+            document.addEventListener('DOMContentLoaded', function() {
+              var customFileBtn = document.getElementById('customFileBtn');
+              var fileInput = document.getElementById('attachments');
+              if (customFileBtn && fileInput) {
+                customFileBtn.addEventListener('click', function(e) {
+                  e.preventDefault();
+                  fileInput.click();
+                });
+              }
+            });
+            // Language Switcher
+            const langSwitcher = document.getElementById('langSwitcher');
+            langSwitcher.addEventListener('change', function() {
+                const lang = this.value;
+                localStorage.setItem('lang', lang);
+                document.querySelectorAll('.lang-en').forEach(function(e) { e.classList.toggle('d-none', lang !== 'en'); });
+                document.querySelectorAll('.lang-id').forEach(function(e) { e.classList.toggle('d-none', lang !== 'id'); });
+                // Update select options for schedule
+                document.querySelectorAll('select[name="schedule_option"] option').forEach(function(opt) {
+                    opt.textContent = lang === 'en' ? opt.getAttribute('data-en') : opt.getAttribute('data-id');
+                });
+                // Update Tagify placeholder
+                var ph = lang === 'en' ? input.getAttribute('data-en') : input.getAttribute('data-id');
+                initTagify(ph);
+                // Update file input label if no files
+                if (fileInput && fileInputLabel && (!fileInput.files || fileInput.files.length === 0)) {
+                    fileInputLabel.querySelector('.lang-en').textContent = 'No files chosen';
+                    fileInputLabel.querySelector('.lang-id').textContent = 'Belum ada file dipilih';
+                }
+            });
+            // On load, set language from localStorage
+            (function() {
+                const lang = localStorage.getItem('lang') || 'en';
+                langSwitcher.value = lang;
+                langSwitcher.dispatchEvent(new Event('change'));
+                // Also update Tagify placeholder
+                var ph = lang === 'en' ? input.getAttribute('data-en') : input.getAttribute('data-id');
+                initTagify(ph);
+            })();
+            // Dark Mode Toggle
+            const darkToggle = document.getElementById('darkModeToggle');
+            const toggleKnob = document.getElementById('toggleKnob');
+            function setDarkMode(on) {
+                document.body.classList.toggle('bg-dark', on);
+                document.body.classList.toggle('text-light', on);
+                document.querySelectorAll('.card').forEach(function(c) { c.classList.toggle('bg-dark', on); });
+                document.querySelectorAll('.card').forEach(function(c) { c.classList.toggle('text-light', on); });
+                document.querySelectorAll('.navbar').forEach(function(n) { n.classList.toggle('navbar-dark', on); });
+                document.querySelectorAll('.navbar').forEach(function(n) { n.classList.toggle('bg-dark', on); });
+                document.querySelectorAll('.navbar').forEach(function(n) { n.classList.toggle('bg-primary', !on); });
+                document.querySelectorAll('.table').forEach(function(t) { t.classList.toggle('table-dark', on); });
+                darkToggle.setAttribute('aria-pressed', on ? 'true' : 'false');
+                localStorage.setItem('darkMode', on ? '1' : '0');
+            }
+            if (darkToggle) {
+                darkToggle.addEventListener('click', function() {
+                    setDarkMode(!document.body.classList.contains('bg-dark'));
+                });
+                darkToggle.addEventListener('keydown', function(e) {
+                    if (e.key === ' ' || e.key === 'Enter') {
+                        setDarkMode(!document.body.classList.contains('bg-dark'));
+                    }
+                });
+            }
+            // On load, set dark mode from localStorage
+            (function() {
+                setDarkMode(localStorage.getItem('darkMode') === '1');
+            })();
+            // Toast notification logic
+            function showToast(message, type = 'info') {
+                const toastContainer = document.getElementById('toastContainer');
+                if (!toastContainer) return;
+                const toast = document.createElement('div');
+                toast.className = `toast align-items-center text-bg-${type} border-0 show mb-2`;
+                toast.setAttribute('role', 'alert');
+                toast.setAttribute('aria-live', 'assertive');
+                toast.setAttribute('aria-atomic', 'true');
+                toast.innerHTML = `
+                  <div class="d-flex">
+                    <div class="toast-body">${message}</div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                  </div>
+                `;
+                toastContainer.appendChild(toast);
+                setTimeout(() => {
+                  toast.classList.remove('show');
+                  setTimeout(() => toast.remove(), 500);
+                }, 4000);
+            }
+            // Example: showToast('Email scheduled successfully!', 'success');
+            // You can call showToast from AJAX or after form submit as needed.
+            </script>
+</body>
+</html>

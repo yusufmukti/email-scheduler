@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script>
+    // Apply dark mode class ASAP on page load for seamless navigation
+    (function() {
+      try {
+        if (localStorage.getItem('darkMode') === '1') {
+          document.documentElement.classList.add('bg-dark');
+          document.body && document.body.classList.add('bg-dark');
+        }
+      } catch(e) {}
+    })();
+    </script>
+    {% include '_favicon.html' %}
+  <style>
+  /* Tagify placeholder visibility fix for dark mode */
+  body.bg-dark .tagify__input[data-placeholder]::before,
+  body.bg-dark .tagify__input span[data-placeholder],
+  body.bg-dark .tagify__input::before,
+  body.bg-dark .tagify__input > span[data-placeholder],
+  body.bg-dark .tagify__input > [data-placeholder] {
+    color: #fff !important;
+    opacity: 1 !important;
+    font-weight: 500 !important;
+    text-shadow: 0 1px 2px #181a1b !important;
+  }
+  /* Force Tagify placeholder visible in dark mode with high specificity */
+  body.bg-dark .tagify__input[data-placeholder]::before {
+    color: #fff !important;
+    opacity: 1 !important;
+  }
+  /* Tagify custom placeholder color for dark mode */
+  body.bg-dark .tagify__input::before,
+  body.bg-dark .tagify__input > span[contenteditable][data-placeholder]::before,
+  body.bg-dark .tagify__input[data-placeholder]::before {
+    color: #fff !important;
+    opacity: 1 !important;
+  }
+  /* Force Tagify placeholder span to white in dark mode */
+  body.bg-dark .tagify__input > span[contenteditable][data-placeholder]::before {
+    color: #fff !important;
+    opacity: 1 !important;
+  }
+  /* Force Tagify custom placeholder visible in dark mode with high specificity */
+  body.bg-dark .tagify__input,
+  body.bg-dark .tagify__input::before {
+    color: #fff !important;
+    background: transparent !important;
+    opacity: 1 !important;
+  }
+  /* Make Tagify custom placeholder visible in dark mode */
+  body.bg-dark .tagify__input::before,
+  body.bg-dark .tagify--focus .tagify__input::before {
+    color: #b5e3ff !important;
+    opacity: 1 !important;
+  }
+  /* Make input placeholder visible in dark mode */
+  body.bg-dark ::placeholder {
+    color: #b5e3ff !important;
+    opacity: 1 !important;
+  }
+  body.bg-dark input:-ms-input-placeholder { color: #b5e3ff !important; } /* IE 10+ */
+  body.bg-dark input::-ms-input-placeholder { color: #b5e3ff !important; } /* Edge */
+  /* Toggle switch for dark mode */
+  .toggle-switch { user-select: none; }
+  .toggle-switch[aria-pressed="true"] #toggleKnob { left: 22px !important; background: #7FDBFF !important; }
+  .toggle-switch[aria-pressed="false"] #toggleKnob { left: 2px !important; background: #fff !important; }
+  .toggle-switch #sunIcon { color: #FFDC00; opacity: 1; transition: opacity 0.2s; }
+  .toggle-switch #moonIcon { color: #7FDBFF; opacity: 0.7; transition: opacity 0.2s; }
+  .toggle-switch[aria-pressed="true"] #sunIcon { opacity: 0.5; }
+  .toggle-switch[aria-pressed="true"] #moonIcon { opacity: 1; }
+  /* --- Improved dark mode palette using CSS variables --- */
+  :root {
+    --dm-bg: #20232a;
+    --dm-bg-card: #23272f;
+    --dm-bg-navbar: #181a1b;
+    --dm-bg-modal: #181a1b;
+    --dm-border: #2d323c;
+    --dm-text: #f3f4f6;
+    --dm-text-secondary: #b5b8c0;
+    --dm-accent: #339af0;
+    --dm-accent-focus: #4dabf7;
+    --dm-success: #51cf66;
+    --dm-danger: #ff6b6b;
+    --dm-warning: #ffe066;
+    --dm-info: #339af0;
+    --dm-placeholder: #bbb;
+    --dm-brand: #339af0;
+  }
+  body.bg-dark {
+    background-color: var(--dm-bg) !important;
+    color: var(--dm-text) !important;
+  }
+  body.bg-dark .card,
+  body.bg-dark .table,
+  body.bg-dark .dropdown-menu {
+    background-color: var(--dm-bg-card) !important;
+    color: var(--dm-text) !important;
+    border-color: var(--dm-border) !important;
+  }
+  body.bg-dark .navbar,
+  body.bg-dark .navbar-dark {
+    background-color: var(--dm-bg-navbar) !important;
+    color: #fff !important;
+  }
+  body.bg-dark .table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: #23272f !important;
+  }
+  body.bg-dark .form-control,
+  body.bg-dark .form-select {
+    background-color: var(--dm-bg-card) !important;
+    color: var(--dm-text) !important;
+    border-color: var(--dm-border) !important;
+  }
+  body.bg-dark .form-control:focus,
+  body.bg-dark .form-select:focus {
+    background-color: var(--dm-bg-card) !important;
+    color: var(--dm-accent-focus) !important;
+    border-color: var(--dm-accent-focus) !important;
+    box-shadow: 0 0 0 0.2rem rgba(77,171,247,.25) !important;
+  }
+  body.bg-dark .btn-primary {
+    background-color: var(--dm-accent) !important;
+    border-color: var(--dm-accent) !important;
+    color: #fff !important;
+  }
+  body.bg-dark .btn-primary:hover {
+    background-color: var(--dm-accent-focus) !important;
+    border-color: var(--dm-accent-focus) !important;
+  }
+  body.bg-dark .btn-success {
+    background-color: var(--dm-success) !important;
+    border-color: var(--dm-success) !important;
+    color: #fff !important;
+  }
+  body.bg-dark .btn-danger {
+    background-color: var(--dm-danger) !important;
+    border-color: var(--dm-danger) !important;
+    color: #fff !important;
+  }
+  body.bg-dark .btn-warning {
+    background-color: var(--dm-warning) !important;
+    border-color: var(--dm-warning) !important;
+    color: #23272f !important;
+  }
+  body.bg-dark .btn-outline-light {
+    color: var(--dm-brand) !important;
+    border-color: var(--dm-brand) !important;
+  }
+  body.bg-dark .btn-outline-light:hover {
+    background-color: var(--dm-brand) !important;
+    color: #23272f !important;
+  }
+  body.bg-dark .alert-info {
+    background-color: var(--dm-info) !important;
+    color: #fff !important;
+    border-color: var(--dm-info) !important;
+  }
+  body.bg-dark .alert-success {
+    background-color: var(--dm-success) !important;
+    color: #fff !important;
+    border-color: var(--dm-success) !important;
+  }
+  body.bg-dark .alert-danger {
+    background-color: var(--dm-danger) !important;
+    color: #fff !important;
+    border-color: var(--dm-danger) !important;
+  }
+  body.bg-dark .alert-warning {
+    background-color: var(--dm-warning) !important;
+    color: #23272f !important;
+    border-color: var(--dm-warning) !important;
+  }
+  body.bg-dark .table-dark {
+    background-color: var(--dm-bg-card) !important;
+    color: var(--dm-text) !important;
+  }
+  body.bg-dark .table-light {
+    background-color: var(--dm-bg-card) !important;
+    color: var(--dm-brand) !important;
+  }
+  body.bg-dark .dropdown-item {
+    color: var(--dm-text-secondary) !important;
+  }
+  body.bg-dark .dropdown-item.active, body.bg-dark .dropdown-item:active {
+    background-color: var(--dm-accent-focus) !important;
+    color: #181C1F !important;
+  }
+  /* Always white for brand */
+  .navbar .navbar-brand { color: #fff !important; }
+  /* Placeholder color for dark mode */
+  body.bg-dark ::placeholder {
+    color: var(--dm-placeholder) !important;
+    opacity: 1 !important;
+  }
+  body.bg-dark .tagify__input[data-placeholder]::before,
+  body.bg-dark .tagify__input span[data-placeholder] {
+    color: #fff !important;
+    opacity: 1 !important;
+  }
+  </style>
+        <meta charset="UTF-8">
+        <title>Edit Scheduled Email</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@yaireo/tagify@4.17.9/dist/tagify.css">
+    <link href="{{ url_for('static', filename='css/brand.css') }}" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <body class="bg-light">
+    <script>
+      // Shared dark mode logic for all pages
+      (function() {
+        function applyDarkMode(dark) {
+          if (dark) {
+            document.body.classList.add('bg-dark');
+            document.body.classList.remove('bg-light');
+          } else {
+            document.body.classList.remove('bg-dark');
+            document.body.classList.add('bg-light');
+          }
+          var darkToggle = document.getElementById('darkModeToggle');
+          if (darkToggle) {
+            darkToggle.setAttribute('aria-pressed', dark ? 'true' : 'false');
+            var knob = document.getElementById('toggleKnob');
+            if (knob) {
+              knob.style.left = dark ? '22px' : '2px';
+              knob.style.background = dark ? '#7FDBFF' : '#fff';
+            }
+          }
+        }
+        // On load, apply mode from localStorage
+        var dark = localStorage.getItem('darkMode') === '1';
+        applyDarkMode(dark);
+        // Listen for toggle and update everywhere
+        window.addEventListener('DOMContentLoaded', function() {
+          var darkToggle = document.getElementById('darkModeToggle');
+          if (darkToggle) {
+            darkToggle.addEventListener('click', function() {
+              var newDark = !(document.body.classList.contains('bg-dark'));
+              localStorage.setItem('darkMode', newDark ? '1' : '0');
+              applyDarkMode(newDark);
+            });
+            darkToggle.addEventListener('keydown', function(e) {
+              if (e.key === ' ' || e.key === 'Enter') {
+                var newDark = !(document.body.classList.contains('bg-dark'));
+                localStorage.setItem('darkMode', newDark ? '1' : '0');
+                applyDarkMode(newDark);
+              }
+            });
+          }
+          // Always re-apply mode in case of navigation
+          applyDarkMode(localStorage.getItem('darkMode') === '1');
+        });
+        // Listen for storage changes (other tabs/pages)
+        window.addEventListener('storage', function(e) {
+          if (e.key === 'darkMode') {
+            applyDarkMode(e.newValue === '1');
+          }
+        });
+      })();
+    </script>
+    <a href="#mainContent" class="skip-link">Skip to main content</a>
+            <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4" aria-label="Main Navigation" id="mainNavbar">
+                <div class="container-fluid">
+                    <a class="navbar-brand d-flex align-items-center gap-2 lang-en" href="/" aria-label="Homepage">
+                        <img src="{{ url_for('static', filename='logo.svg') }}" alt="Logo" width="32" height="32" style="vertical-align:middle;">
+                        <span>Email Scheduler</span>
+                    </a>
+                    <a class="navbar-brand d-flex align-items-center gap-2 lang-id d-none" href="/" aria-label="Beranda">
+                        <img src="{{ url_for('static', filename='logo.svg') }}" alt="Logo" width="32" height="32" style="vertical-align:middle;">
+                        <span>Penjadwal Email</span>
+                    </a>
+                    <div class="d-flex ms-auto align-items-center gap-2">
+                        <div id="darkModeToggle" class="toggle-switch" role="button" tabindex="0" aria-pressed="false" title="Toggle dark mode" style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                            <span id="sunIcon" class="bi bi-sun" style="font-size: 1.3rem;"></span>
+                            <div style="position: relative; width: 44px; height: 24px; background: #ccc; border-radius: 12px; transition: background 0.2s;">
+                                <div id="toggleKnob" style="position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background: #fff; border-radius: 50%; box-shadow: 0 1px 4px rgba(0,0,0,0.2); transition: left 0.2s, background 0.2s;"></div>
+                            </div>
+                            <span id="moonIcon" class="bi bi-moon" style="font-size: 1.3rem;"></span>
+                        </div>
+                        <select id="langSwitcher" class="form-select form-select-sm w-auto">
+                            <option value="en">EN</option>
+                            <option value="id">ID</option>
+                        </select>
+                        <a href="/" class="btn btn-outline-light lang-en">Back to Home</a>
+                        <a href="/" class="btn btn-outline-light lang-id d-none">Kembali ke Beranda</a>
+                    </div>
+                </div>
+            </nav>
+                <div class="container" id="mainContent">
+                        <!-- Toast container for feedback -->
+                        <div aria-live="polite" aria-atomic="true" class="position-fixed top-0 end-0 p-3" style="z-index: 1080;">
+                            <div id="toastContainer"></div>
+                        </div>
+            <div class="row justify-content-center">
+                <div class="col-lg-7 col-md-10">
+                                <div class="card shadow mb-4">
+                                    <div class="card-header bg-primary text-white lang-en section-title">Edit Scheduled Email</div>
+                                    <div class="card-header bg-primary text-white lang-id d-none section-title">Ubah Email Terjadwal</div>
+                                    <!-- Time Variable Legend Toggle: How to use {{time}} and all formats in subject/body -->
+                                            <form method="post" enctype="multipart/form-data" aria-label="Edit Scheduled Email Form">
+                                              <div class="accordion mb-3" id="editAccordion">
+                                                <div class="accordion-item">
+                                                  <h2 class="accordion-header" id="headingToEdit">
+                                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseToEdit" aria-expanded="true" aria-controls="collapseToEdit">
+                                                      <span class="lang-en">Recipients</span><span class="lang-id d-none">Penerima</span>
+                                                    </button>
+                                                  </h2>
+                                                  <div id="collapseToEdit" class="accordion-collapse collapse show" aria-labelledby="headingToEdit" data-bs-parent="#editAccordion">
+                                                    <div class="accordion-body">
+                                                      <div class="mb-3">
+                                                        <label class="form-label lang-en" for="to_address">Email Address(es)</label>
+                                                        <label class="form-label lang-id d-none" for="to_address">Alamat Email</label>
+                                                        {# Always set input.value to comma-separated emails for Tagify #}
+<input id="to_address" name="to_address" class="form-control" required placeholder="Type and press enter" data-en="Type and press enter" data-id="Ketik lalu tekan enter" autofocus value="{{ job.to_address|default('') }}" aria-label="Recipient Email Addresses">
+<!-- No hidden input needed, use only the visible input for Tagify -->
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                                <div class="accordion-item">
+                                                  <h2 class="accordion-header" id="headingContentEdit">
+                                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseContentEdit" aria-expanded="true" aria-controls="collapseContentEdit">
+                                                      <span class="lang-en">Content</span><span class="lang-id d-none">Isi Email</span>
+                                                    </button>
+                                                  </h2>
+                                                  <div id="collapseContentEdit" class="accordion-collapse collapse show" aria-labelledby="headingContentEdit" data-bs-parent="#editAccordion">
+                                                    <div class="accordion-body">
+                                                      <div class="mb-3">
+                                                        <label class="form-label lang-en" for="subject">Subject</label>
+                                                        <label class="form-label lang-id d-none" for="subject">Subjek</label>
+                                                        <input id="subject" type="text" name="subject" class="form-control" value="{{ job.subject }}" required aria-label="Email Subject">
+                                                      </div>
+                                                      <div class="mb-3">
+                                                        <label class="form-label lang-en" for="message">Message</label>
+                                                        <label class="form-label lang-id d-none" for="message">Pesan</label>
+                                                        <textarea id="message" name="message" class="form-control" rows="3" required aria-label="Email Message">{{ job.message }}</textarea>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                                <div class="accordion-item">
+                                                  <h2 class="accordion-header" id="headingScheduleEdit">
+                                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseScheduleEdit" aria-expanded="true" aria-controls="collapseScheduleEdit">
+                                                      <span class="lang-en">Schedule</span><span class="lang-id d-none">Jadwal</span>
+                                                    </button>
+                                                  </h2>
+                                                  <div id="collapseScheduleEdit" class="accordion-collapse collapse show" aria-labelledby="headingScheduleEdit" data-bs-parent="#editAccordion">
+                                                    <div class="accordion-body">
+                                                      <div class="row mb-3">
+                                                        <div class="col-md-6">
+                                                          <label class="form-label lang-en" for="schedule_option">Schedule</label>
+                                                          <label class="form-label lang-id d-none" for="schedule_option">Jadwal</label>
+                                                          <select id="schedule_option" name="schedule_option" class="form-select" required aria-label="Schedule Option">
+                                                            <option value="one_time" data-en="One-Time Only" data-id="Sekali Saja" {% if job.schedule_option == 'one_time' %}selected{% endif %}>One-Time Only</option>
+                                                            <option value="hourly" data-en="Every Hour" data-id="Setiap Jam" {% if job.schedule_option == 'hourly' %}selected{% endif %}>Every Hour</option>
+                                                            <option value="daily" data-en="Daily" data-id="Harian" {% if job.schedule_option == 'daily' %}selected{% endif %}>Daily</option>
+                                                            <option value="weekly" data-en="Weekly" data-id="Mingguan" {% if job.schedule_option == 'weekly' %}selected{% endif %}>Weekly</option>
+                                                            <option value="monthly" data-en="Monthly" data-id="Bulanan" {% if job.schedule_option == 'monthly' %}selected{% endif %}>Monthly</option>
+                                                            <option value="three_monthly" data-en="Every 3 Months" data-id="Setiap 3 Bulan" {% if job.schedule_option == 'three_monthly' %}selected{% endif %}>Every 3 Months</option>
+                                                            <option value="yearly" data-en="Yearly" data-id="Tahunan" {% if job.schedule_option == 'yearly' %}selected{% endif %}>Yearly</option>
+                                                          </select>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                          <label class="form-label lang-en" for="start_date">Start Date</label>
+                                                          <label class="form-label lang-id d-none" for="start_date">Tanggal Mulai</label>
+                                                          <input id="start_date" type="date" name="start_date" class="form-control" value="{{ job.start_date.strftime('%Y-%m-%d') if job.start_date is defined and job.start_date }}" required aria-label="Start Date">
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                          <label class="form-label lang-en" for="start_time">Start Time</label>
+                                                          <label class="form-label lang-id d-none" for="start_time">Waktu Mulai</label>
+                                                          <input id="start_time" type="time" name="start_time" class="form-control" value="{{ job.start_date.strftime('%H:%M') if job.start_date is defined and job.start_date }}" required aria-label="Start Time">
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                                <div class="accordion-item">
+                                                  <h2 class="accordion-header" id="headingAttachmentsEdit">
+                                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAttachmentsEdit" aria-expanded="true" aria-controls="collapseAttachmentsEdit">
+                                                      <span class="lang-en">Attachments</span><span class="lang-id d-none">Lampiran</span>
+                                                    </button>
+                                                  </h2>
+                                                  <div id="collapseAttachmentsEdit" class="accordion-collapse collapse show" aria-labelledby="headingAttachmentsEdit" data-bs-parent="#editAccordion">
+                                                    <div class="accordion-body">
+                                                      <div class="mb-3">
+                                                        <label class="form-label lang-en" for="attachments">Attachments</label>
+                                                        <label class="form-label lang-id d-none" for="attachments">Lampiran</label>
+                                                        <div class="custom-file-input-wrapper">
+                                                          <input type="file" id="attachments" name="attachments" class="form-control d-none" multiple aria-label="Attachments">
+                                                          <button type="button" id="customFileBtn" class="btn btn-outline-secondary">
+                                                            <span class="lang-en">Choose Files</span>
+                                                            <span class="lang-id d-none">Pilih File</span>
+                                                          </button>
+                                                          <span id="fileInputLabel" class="form-label mt-1 ms-2 align-middle">
+                                                            <span class="lang-en">No files chosen</span>
+                                                            <span class="lang-id d-none">Belum ada file dipilih</span>
+                                                          </span>
+                                                          <button type="button" id="addAttachmentBtn" class="btn btn-success ms-2">
+                                                            <span class="lang-en">Add</span>
+                                                            <span class="lang-id d-none">Tambah</span>
+                                                          </button>
+                                                        </div>
+                                                        <div id="pendingAttachmentsList" class="mt-2"></div>
+</script>
+<script>
+// Pending attachments logic for edit page
+let pendingAttachments = [];
+const fileInput = document.getElementById('attachments');
+const addBtn = document.getElementById('addAttachmentBtn');
+const pendingList = document.getElementById('pendingAttachmentsList');
+
+addBtn.addEventListener('click', function() {
+  if (!fileInput.files.length) return;
+  for (let i = 0; i < fileInput.files.length; i++) {
+    pendingAttachments.push(fileInput.files[i]);
+  }
+  updatePendingList();
+  fileInput.value = '';
+  document.getElementById('fileInputLabel').innerHTML = '<span class="lang-en">No files chosen</span><span class="lang-id d-none">Belum ada file dipilih</span>';
+});
+
+function updatePendingList() {
+  if (pendingAttachments.length === 0) {
+    pendingList.innerHTML = '';
+    return;
+  }
+  const lang = localStorage.getItem('lang') || 'en';
+  const pendingLabel = lang === 'en' ? 'Pending Attachments:' : 'Lampiran Tertunda:';
+  const removeLabel = lang === 'en' ? 'Remove' : 'Hapus';
+  let html = `<b>${pendingLabel}</b><ul>`;
+  pendingAttachments.forEach((file, idx) => {
+    html += `<li>${file.name} <button type="button" class="btn btn-sm btn-danger ms-2" onclick="removePendingAttachment(${idx})">${removeLabel}</button></li>`;
+  });
+  html += '</ul>';
+  pendingList.innerHTML = html;
+}
+
+window.removePendingAttachment = function(idx) {
+  pendingAttachments.splice(idx, 1);
+  updatePendingList();
+}
+
+// On form submit, append pending files to the FormData
+const form = document.querySelector('form');
+if (form) {
+  form.addEventListener('submit', function(e) {
+    if (pendingAttachments.length > 0) {
+      const dataTransfer = new DataTransfer();
+      pendingAttachments.forEach(f => dataTransfer.items.add(f));
+      fileInput.files = dataTransfer.files;
+    }
+  });
+}
+</script>
+                                                      </div>
+                                                      {% if job.attachments %}
+                                                      <div class="mb-3">
+                                                        <label class="form-label lang-en">Current Attachments</label>
+                                                        <label class="form-label lang-id d-none">Lampiran Saat Ini</label>
+                                                        <ul id="current-attachments-list" class="list-group mb-2">
+                                                          {% for att in job.attachments.split(',') %}
+                                                          <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                            <a href="/{{ att }}" target="_blank">{{ att.split('_', 1)[-1] }}</a>
+                                                            <button type="button" class="btn btn-sm btn-outline-danger remove-attachment-btn" data-att="{{ att }}" title="Remove">
+                                                              <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                          </li>
+                                                          {% endfor %}
+                                                        </ul>
+                                                        <input type="hidden" name="remove_attachments" id="remove-attachments-input" value="">
+                                                      </div>
+                                                      <script>
+                                                      document.addEventListener('DOMContentLoaded', function() {
+                                                        var removed = [];
+                                                        document.querySelectorAll('.remove-attachment-btn').forEach(function(btn) {
+                                                          btn.addEventListener('click', function() {
+                                                            var att = btn.getAttribute('data-att');
+                                                            removed.push(att);
+                                                            document.getElementById('remove-attachments-input').value = removed.join(',');
+                                                            btn.closest('li').remove();
+                                                          });
+                                                        });
+                                                      });
+                                                      </script>
+                                                      {% endif %}
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                              <div class="d-flex justify-content-between">
+                                                <button type="submit" class="btn btn-primary lang-en">Save Changes</button>
+                                                <button type="submit" class="btn btn-primary lang-id d-none">Simpan Perubahan</button>
+                                                <a href="/" class="btn btn-secondary lang-en">Cancel</a>
+                                                <a href="/" class="btn btn-secondary lang-id d-none">Batal</a>
+                                              </div>
+                                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify@4.17.9/dist/tagify.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.js"></script>
+            <script>
+      // Final robust Tagify initialization for to_address (no disappearing, no consolidation)
+      (function() {
+        var input = document.getElementById('to_address');
+        var tagifyInstance = null;
+        var tagifyInitialized = false;
+        function getTags() {
+          if (input && input.value) {
+            // Split on comma, semicolon, or newline, and filter valid emails
+            return input.value.split(/[,;\n]/).map(function(e){return e.trim();}).filter(Boolean);
+          }
+          return [];
+        }
+        function initTagify(placeholder) {
+          // Try to force placeholder color using inline style on Tagify's placeholder span (third solution)
+          setTimeout(function() {
+            if (document.body.classList.contains('bg-dark')) {
+              // Tagify's placeholder is a span[data-placeholder] inside .tagify__input
+              var tagifySpans = document.querySelectorAll('.tagify__input span[data-placeholder]');
+              tagifySpans.forEach(function(el) {
+                el.style.setProperty('color', '#fff', 'important');
+                el.style.setProperty('opacity', '1', 'important');
+              });
+            }
+          }, 100);
+          if (!input) return;
+          if (tagifyInitialized) {
+            console.log('Tagify already initialized, skipping');
+            return;
+          }
+          if (tagifyInstance) {
+            tagifyInstance.destroy();
+            tagifyInstance = null;
+          }
+          // Always clear input.value before Tagify, then add tags as array
+          var emails = (input.defaultValue || '').split(/[,;\s]+/).map(function(e){return e.trim();}).filter(Boolean);
+          input.value = '';
+          input.placeholder = placeholder;
+          tagifyInstance = new Tagify(input, {
+            delimiters: ",;\n",
+            pattern: /^[^@\s]+@[^@\s]+\.[^@\s]+$/,
+            whitelist: [],
+            dropdown: { enabled: 0 },
+            enforceWhitelist: false
+          });
+          if (emails.length > 0) {
+            tagifyInstance.addTags(emails);
+            console.log('Tagify addTags:', emails);
+          }
+          // Force Tagify placeholder color to white in dark mode after initialization
+          setTimeout(function() {
+            if (document.body.classList.contains('bg-dark')) {
+              // Tagify's placeholder is a ::before on .tagify__input, but also sometimes a span[data-placeholder]
+              var tagifyInputs = document.querySelectorAll('.tagify__input');
+              tagifyInputs.forEach(function(el) {
+                el.style.color = '#fff';
+              });
+              var tagifySpans = document.querySelectorAll('.tagify__input span[data-placeholder]');
+              tagifySpans.forEach(function(el) {
+                el.style.color = '#fff';
+              });
+            }
+          }, 50);
+          tagifyInitialized = true;
+          console.log('Tagify initialized');
+        }
+        function getPlaceholder() {
+          var lang = localStorage.getItem('lang') || 'en';
+          return lang === 'en' ? input.getAttribute('data-en') : input.getAttribute('data-id');
+        }
+        var accordion = document.getElementById('collapseToEdit');
+        if (accordion) {
+          accordion.addEventListener('shown.bs.collapse', function() {
+            // Only initialize if not already done
+            setTimeout(function() {
+              initTagify(getPlaceholder());
+            }, 10);
+          });
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+          setTimeout(function() {
+            initTagify(getPlaceholder());
+          }, 10);
+        });
+        window.reinitTagifyEdit = function() {
+          setTimeout(function() {
+            initTagify(getPlaceholder());
+          }, 10);
+        };
+        window._tagifyEditInput = input;
+      })();
+    // Custom file input button logic (robust for accordion/section changes)
+    document.addEventListener('DOMContentLoaded', function() {
+      var customFileBtn = document.getElementById('customFileBtn');
+      var fileInput = document.getElementById('attachments');
+      if (customFileBtn && fileInput) {
+        customFileBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          fileInput.click();
+        });
+      }
+    });
+    // File input label update logic
+  var fileInputLabel = document.getElementById('fileInputLabel');
+  if (fileInput && fileInputLabel) {
+    fileInput.addEventListener('change', function() {
+      const lang = localStorage.getItem('lang') || 'en';
+      let label = '';
+      if (this.files && this.files.length > 0) {
+        label = Array.from(this.files).map(f => f.name).join(', ');
+      } else {
+        label = lang === 'en' ? 'No files chosen' : 'Belum ada file dipilih';
+      }
+      fileInputLabel.querySelector('.lang-en').textContent = this.files && this.files.length > 0 ? label : 'No files chosen';
+      fileInputLabel.querySelector('.lang-id').textContent = this.files && this.files.length > 0 ? label : 'Belum ada file dipilih';
+    });
+  }
+  // Language Switcher
+  const langSwitcher = document.getElementById('langSwitcher');
+  langSwitcher.addEventListener('change', function() {
+    const lang = this.value;
+    localStorage.setItem('lang', lang);
+    document.querySelectorAll('.lang-en').forEach(function(e) { e.classList.toggle('d-none', lang !== 'en'); });
+    document.querySelectorAll('.lang-id').forEach(function(e) { e.classList.toggle('d-none', lang !== 'id'); });
+    // Update select options for schedule
+    document.querySelectorAll('select[name="schedule_option"] option').forEach(function(opt) {
+      opt.textContent = lang === 'en' ? opt.getAttribute('data-en') : opt.getAttribute('data-id');
+    });
+    // Update Tagify placeholder and tags
+    if (window.reinitTagifyEdit) window.reinitTagifyEdit();
+    // Update file input label if no files
+    if (fileInput && fileInputLabel && (!fileInput.files || fileInput.files.length === 0)) {
+      fileInputLabel.querySelector('.lang-en').textContent = 'No files chosen';
+      fileInputLabel.querySelector('.lang-id').textContent = 'Belum ada file dipilih';
+    }
+    // Update pending attachments list language
+    if (typeof updatePendingList === 'function') updatePendingList();
+  });
+    // On load, set language from localStorage
+    (function() {
+        const lang = localStorage.getItem('lang') || 'en';
+        langSwitcher.value = lang;
+        langSwitcher.dispatchEvent(new Event('change'));
+        // Also update Tagify placeholder
+        var ph = lang === 'en' ? input.getAttribute('data-en') : input.getAttribute('data-id');
+        initTagify(ph);
+    })();
+  // Dark Mode Toggle (fully robust)
+  const darkToggle = document.getElementById('darkModeToggle');
+  const toggleKnob = document.getElementById('toggleKnob');
+  const mainNavbar = document.getElementById('mainNavbar');
+  function setDarkMode(on) {
+    document.body.classList.toggle('bg-dark', on);
+    document.body.classList.toggle('text-light', on);
+    document.querySelectorAll('.card').forEach(function(c) { c.classList.toggle('bg-dark', on); c.classList.toggle('text-light', on); });
+    document.querySelectorAll('.table').forEach(function(t) { t.classList.toggle('table-dark', on); });
+    document.querySelectorAll('.form-control, .form-select').forEach(function(f) { f.classList.toggle('bg-dark', on); f.classList.toggle('text-light', on); });
+    document.querySelectorAll('.dropdown-menu').forEach(function(d) { d.classList.toggle('bg-dark', on); d.classList.toggle('text-light', on); });
+    document.querySelectorAll('.alert').forEach(function(a) { a.classList.toggle('bg-dark', on); a.classList.toggle('text-light', on); });
+    if (mainNavbar) {
+      mainNavbar.classList.toggle('navbar-dark', on);
+      mainNavbar.classList.toggle('bg-dark', on);
+      mainNavbar.classList.toggle('bg-primary', !on);
+    }
+    if (darkToggle) {
+      darkToggle.setAttribute('aria-pressed', on ? 'true' : 'false');
+      if (toggleKnob) {
+        toggleKnob.style.left = on ? '22px' : '2px';
+        toggleKnob.style.background = on ? '#7FDBFF' : '#fff';
+      }
+    }
+    localStorage.setItem('darkMode', on ? '1' : '0');
+  }
+  function getDarkMode() {
+    return document.body.classList.contains('bg-dark');
+  }
+  if (darkToggle) {
+    darkToggle.addEventListener('click', function() {
+      setDarkMode(!getDarkMode());
+    });
+    darkToggle.addEventListener('keydown', function(e) {
+      if (e.key === ' ' || e.key === 'Enter') {
+        setDarkMode(!getDarkMode());
+      }
+    });
+  }
+  document.addEventListener('DOMContentLoaded', function() {
+    setDarkMode(localStorage.getItem('darkMode') === '1');
+  });
+    // Toast notification logic
+    function showToast(message, type = 'info') {
+        const toastContainer = document.getElementById('toastContainer');
+        if (!toastContainer) return;
+        const toast = document.createElement('div');
+        toast.className = `toast align-items-center text-bg-${type} border-0 show mb-2`;
+        toast.setAttribute('role', 'alert');
+        toast.setAttribute('aria-live', 'assertive');
+        toast.setAttribute('aria-atomic', 'true');
+        toast.innerHTML = `
+          <div class="d-flex">
+            <div class="toast-body">${message}</div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+        `;
+        toastContainer.appendChild(toast);
+        setTimeout(() => {
+          toast.classList.remove('show');
+          setTimeout(() => toast.remove(), 500);
+        }, 4000);
+    }
+    // Example: showToast('Changes saved!', 'success');
+    // You can call showToast from AJAX or after form submit as needed.
+            </script>
+            <script>
+document.addEventListener('DOMContentLoaded', function() {
+    var input = document.querySelector('input[name=to_address]');
+    if (!input) return;
+    // Always get tags from the input value
+    function getTags() {
+        return (input.value || '').split(',').map(function(e){return e.trim();}).filter(Boolean);
+    }
+    function initTagifyWithChips() {
+        if (input._tagify) input._tagify.destroy();
+        input.value = '';
+        var tagify = new Tagify(input, {
+            delimiters: ",;\n",
+            pattern: /^[^@\s]+@[^@\s]+\.[^@\s]+$/,
+            whitelist: [],
+            dropdown: { enabled: 0 },
+            enforceWhitelist: false
+        });
+        var tags = getTags();
+        if (tags.length > 0) tagify.addTags(tags);
+    }
+    // If inside accordion, wait for shown.bs.collapse
+    var accordionSection = input.closest('.accordion-collapse');
+    if (accordionSection && !accordionSection.classList.contains('show')) {
+        accordionSection.addEventListener('shown.bs.collapse', initTagifyWithChips, { once: true });
+    } else {
+        initTagifyWithChips();
+    }
+});
+            </script>
+</body>
+</html>

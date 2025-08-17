@@ -1,0 +1,282 @@
+/* Brand and UI Improvements for Email Scheduler */
+:root {
+  --brand-accent: #2563eb;
+  --brand-success: #22c55e;
+  --brand-error: #ef4444;
+  --brand-warning: #f59e42;
+  --brand-info: #38bdf8;
+  --brand-bg-dark: #23272f;
+  --brand-bg-light: #f3f4f6;
+  --brand-gray: #6b7280;
+  --brand-font-main: 'Inter', 'Segoe UI', Arial, sans-serif;
+}
+
+body {
+  font-family: var(--brand-font-main);
+  background-color: var(--brand-bg-light);
+  color: #23272f;
+}
+body.bg-dark {
+  background-color: var(--brand-bg-dark) !important;
+  color: var(--brand-bg-light) !important;
+}
+
+.navbar-brand {
+  font-weight: bold;
+  letter-spacing: 1px;
+  color: var(--brand-accent) !important;
+}
+
+.btn-primary {
+  background: var(--brand-accent) !important;
+  border-color: var(--brand-accent) !important;
+  color: #fff !important;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.btn-primary:hover, .btn-primary:focus {
+  background: #1d4ed8 !important;
+  box-shadow: 0 2px 8px rgba(37,99,235,0.15);
+}
+.btn-success {
+  background: var(--brand-success) !important;
+  border-color: var(--brand-success) !important;
+  color: #fff !important;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.btn-success:hover, .btn-success:focus {
+  background: #16a34a !important;
+  box-shadow: 0 2px 8px rgba(34,197,94,0.15);
+}
+.btn-outline-danger {
+  color: var(--brand-error) !important;
+  border-color: var(--brand-error) !important;
+  background: transparent !important;
+  transition: background 0.2s, color 0.2s;
+}
+.btn-outline-danger:hover, .btn-outline-danger:focus {
+  background: var(--brand-error) !important;
+  color: #fff !important;
+}
+
+.btn-warning {
+  background: var(--brand-warning) !important;
+  border-color: var(--brand-warning) !important;
+  color: #23272f !important;
+}
+.btn-info {
+  background: var(--brand-info) !important;
+  border-color: var(--brand-info) !important;
+  color: #fff !important;
+}
+
+/* Alerts */
+.alert-info {
+  background: var(--brand-info) !important;
+  color: #fff !important;
+  border-color: var(--brand-info) !important;
+}
+.alert-success {
+  background: var(--brand-success) !important;
+  color: #fff !important;
+  border-color: var(--brand-success) !important;
+}
+.alert-danger {
+  background: var(--brand-error) !important;
+  color: #fff !important;
+  border-color: var(--brand-error) !important;
+}
+.alert-warning {
+  background: var(--brand-warning) !important;
+  color: #23272f !important;
+  border-color: var(--brand-warning) !important;
+}
+
+/* Card and Section Styling */
+.card, .section {
+  border-radius: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  border: none;
+}
+.card {
+  box-shadow: 0 4px 16px rgba(37,99,235,0.07), 0 1.5px 4px rgba(0,0,0,0.04);
+  border-radius: 1rem;
+  margin-bottom: 2rem;
+}
+.accordion-item {
+  margin-bottom: 0.5rem;
+}
+
+/* Form Improvements */
+input, select, textarea {
+  border-radius: 0.5rem !important;
+  border: 1px solid #d1d5db !important;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: var(--brand-accent) !important;
+  box-shadow: 0 0 0 2px rgba(37,99,235,0.15);
+}
+
+/* Microinteractions and subtle animations */
+.btn, .btn-sm {
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.1s;
+}
+.btn:active {
+  transform: scale(0.97);
+}
+input, select, textarea {
+  transition: border 0.2s, box-shadow 0.2s;
+}
+input:focus, select:focus, textarea:focus {
+  box-shadow: 0 0 0 2px rgba(37,99,235,0.15);
+}
+.accordion-button {
+  transition: background 0.2s, color 0.2s;
+}
+.accordion-button:not(.collapsed) {
+  background: var(--brand-accent, #2563eb);
+  color: #fff;
+}
+.toast {
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+/* Accessibility: Focus States */
+.btn:focus, a:focus, input:focus, select:focus, textarea:focus {
+  outline: 2px solid var(--brand-accent) !important;
+  outline-offset: 2px;
+}
+
+/* Toast Notification (for feedback) */
+.toast {
+  background: var(--brand-accent);
+  color: #fff;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 8px rgba(37,99,235,0.15);
+}
+
+/* Responsive Table */
+.table-responsive {
+  overflow-x: auto;
+}
+
+/* Visual Hierarchy */
+h1, .h1 { font-size: 2.25rem; font-weight: 700; }
+h2, .h2 { font-size: 1.5rem; font-weight: 600; }
+h3, .h3 { font-size: 1.25rem; font-weight: 500; }
+
+/* Section Headings */
+.section-title {
+  color: var(--brand-accent);
+  font-weight: 700;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Custom Toggle Switch for Dark Mode */
+.toggle-switch {
+  border-radius: 1rem;
+  background: #e5e7eb;
+  transition: background 0.2s;
+}
+body.bg-dark .toggle-switch {
+  background: #374151;
+}
+
+/* File Input Customization */
+.custom-file-label {
+  border-radius: 0.5rem;
+  border: 1px solid #d1d5db;
+  background: #fff;
+  color: #23272f;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+body.bg-dark .custom-file-label {
+  background: #23272f;
+  color: #f3f4f6;
+  border-color: #374151;
+}
+
+/* Hide default file input */
+input[type="file"] {
+  display: none;
+}
+
+/* Tagify Customization */
+.tagify__input {
+  min-width: 120px;
+  color: #23272f;
+}
+body.bg-dark .tagify__input {
+  color: #f3f4f6;
+}
+
+/* Mobile-first improvements */
+@media (max-width: 767.98px) {
+  .navbar .navbar-brand span {
+    font-size: 1.1rem;
+  }
+  .accordion-button {
+    font-size: 1rem;
+    padding: 0.75rem 1rem;
+  }
+  .table-responsive {
+    font-size: 0.95rem;
+  }
+  .table th, .table td {
+    padding: 0.5rem 0.3rem;
+  }
+  .d-flex.flex-wrap.gap-2, .d-flex.gap-1, .d-flex.gap-2 {
+    flex-direction: column !important;
+    gap: 0.5rem !important;
+    align-items: stretch !important;
+  }
+  .btn, .btn-sm {
+    width: 100%;
+    margin-bottom: 0.25rem;
+  }
+  .accordion-body, .card-body {
+    padding: 1rem 0.5rem;
+  }
+  .container, .container-fluid {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+}
+
+/* Accessibility improvements */
+:focus-visible {
+  outline: 2px solid var(--brand-accent, #2563eb) !important;
+  outline-offset: 2px;
+}
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  z-index: 1000;
+  background: #fff;
+  color: #2563eb;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+}
+.skip-link:focus {
+  left: 1rem;
+  top: 1rem;
+  width: auto;
+  height: auto;
+  outline: 2px solid #2563eb;
+  box-shadow: 0 2px 8px rgba(37,99,235,0.15);
+}
+/* Ensure high contrast for alerts and buttons */
+.btn-primary, .btn-success, .btn-danger, .btn-warning, .btn-info, .alert-info, .alert-success, .alert-danger, .alert-warning {
+  text-shadow: 0 1px 2px rgba(0,0,0,0.08);
+}
+
+/* Add more as needed for your UI */

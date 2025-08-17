@@ -1,0 +1,6 @@
+flask
+schedule
+Flask-Dance 
+google-api-python-client
+python-dotenv
+sqlalchemy

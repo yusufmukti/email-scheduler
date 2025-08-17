@@ -1,0 +1,40 @@
+# Bytecode and cache
+__pycache__/
+*.pyc
+
+# Logs
+*.log
+app.log
+
+# Databases
+*.db
+*.sqlite3
+jobs.db
+
+# Environment and secrets
+.env
+*.env
+.secret/
+
+# Attachments and uploads
+attachments/
+
+# macOS
+.DS_Store
+
+# Node.js (if ever used)
+node_modules/
+
+# Temp and backup files
+*.bak
+*.tmp
+
+# Ignore test and docs cache
+tests/__pycache__/
+docs/__pycache__/
+.venv
+.env
+.secret
+app.log
+tests
+jobs.db
