@@ -23,7 +23,7 @@ logging.getLogger().addHandler(file_handler)
 # Configure logging to write to the console
 # logging.basicConfig(level=logging.INFO)
 
-from flask import Flask, render_template, request, redirect, url_for, flash
+
 from typing import List, Optional, Dict, Any
 from flask_dance.contrib.google import google
 from src.models.models import ScheduledJob, Session, init_db
@@ -47,14 +47,13 @@ init_db()
 
 # Serve attachments for download
 
-from flask import send_from_directory
+
 
 
 # Use absolute path for attachments directory
 @app.route('/attachments/<path:filename>')
 def serve_attachment(filename: str):
 	"""Serve an attachment file for download or inline viewing."""
-	from flask import request
 	as_attachment = request.args.get('download', '0') == '1'
 	attachments_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'attachments')
 	return send_from_directory(attachments_dir, filename, as_attachment=as_attachment)
@@ -216,23 +215,15 @@ def send_now(job_id: str):
 def index():
 	"""Show the main page with the form and the user's scheduled jobs."""
 	import sys
-	from flask import session, request
 	logging.debug("google.authorized: %s", google.authorized)
 	logging.debug("google.token: %s", getattr(google, 'token', None))
 	logging.debug("session keys: %s", list(session.keys()))
 	logging.debug("session values: %s", {k: session[k] for k in session.keys()})
 	logging.debug("session cookie: %s", request.cookies.get(app.config.get('SESSION_COOKIE_NAME', 'session')))
-	"""Show the main page with the form and the user's scheduled jobs."""
-	import sys
-	from flask import session, request
-	logging.debug("google.authorized: %s", google.authorized)
-	logging.debug("google.token: %s", getattr(google, 'token', None))
-	logging.debug("session keys: %s", list(session.keys()))
-	logging.debug("session cookie: %s", request.cookies.get(app.config.get('SESSION_COOKIE_NAME', 'session')))
 	if not google.authorized or not getattr(google, 'token', None):
 		logging.warning("Not authorized or missing token after login. google.authorized: %s google.token: %s", google.authorized, getattr(google, 'token', None))
 		# If user just logged in but no token, show error but do not clear session
-		from flask import flash
+	# flash already imported globally
 		flash("Login failed: No valid token received from Google. Please try again or contact support.")
 		return redirect(url_for("google.login"))
 	resp = google.get("/oauth2/v2/userinfo")
@@ -241,7 +232,7 @@ def index():
 	if not resp.ok:
 		logging.warning("google.get userinfo failed: %s", resp.text)
 		session.clear()
-		from flask import flash, redirect, url_for
+	# flash, redirect, url_for already imported globally
 		flash("Session expired or permission revoked. Please log in again.")
 		return redirect(url_for("google.login"))
 	email = resp.json()["email"]
@@ -382,7 +373,7 @@ def cancel(job_id: str):
 @app.route("/logout", methods=["POST"])
 def logout():
 	"""Aggressive logout: clear session, all Flask-Dance tokens, and session cookie, then redirect to login."""
-	from flask import session, make_response, redirect, url_for, flash, request
+	# session, make_response, redirect, url_for, flash, request already imported globally
 	# Clear Flask session
 	session.clear()
 	# Remove Flask-Dance OAuth token from all possible locations
