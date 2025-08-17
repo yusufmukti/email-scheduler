@@ -9,9 +9,13 @@ A modular Flask app for scheduling recurring emails with Google sign-in, using a
 import os
 import logging
 from flask import Flask, render_template, request, redirect, url_for, flash, send_from_directory, session, make_response
+
 from dotenv import load_dotenv
 load_dotenv()
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+
+# Ensure attachments folder exists at startup
+os.makedirs('attachments', exist_ok=True)
 
 # Configure logging to write to both the console and a file
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s')
